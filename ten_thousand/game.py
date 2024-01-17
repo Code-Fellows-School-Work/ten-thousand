@@ -49,6 +49,8 @@ def play_game():
             if player_choice == 'bank':
                 total_score += round_score
                 print(f"You banked your score! Total Score: {total_score}")
+                current_round += 1 # Increment round count
+                num_dice = 6 # Reset dice for the next round
                 round_in_progress = False  # End of the round
             elif player_choice == 'roll':
                 if num_dice == 0:
@@ -57,7 +59,6 @@ def play_game():
                 continue  # Roll the remaining dice
             else:
                 print("Invalid input. Please type 'bank' or 'roll'.")
-
 
 if __name__ == "__main__":
     play_game() 
