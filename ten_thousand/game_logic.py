@@ -27,7 +27,7 @@ class GameLogic:
         if set(dice_roll) == {1, 2, 3, 4, 5, 6}:
             return 1500
 
-        "If the dice roll is a three-of-a-kind, then add to score 1500"
+        "If there are three pairs of any values, then add to score 1500"
         if len(counter) == 3 and all(count == 2 for count in counter.values()):
             return 1500
 
