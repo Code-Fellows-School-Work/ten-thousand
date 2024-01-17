@@ -15,7 +15,7 @@ class GameLogic:
     @staticmethod
     def calculate_score(dice_roll):
         """
-        Calculate the score for a given dice roll.
+        Beginning with a score of 0, calculate the score for a given dice roll
 
         :param dice_roll: tuple of integers representing the dice roll
         :return: int representing the score
@@ -23,22 +23,27 @@ class GameLogic:
         score = 0
         counter = Counter(dice_roll)
 
-        # Check for a straight
+        "If the dice roll is a straight, then add to score 1500"
         if set(dice_roll) == {1, 2, 3, 4, 5, 6}:
             return 1500
 
-        # Check for three pairs
+        "If the dice roll is a three-of-a-kind, then add to score 1500"
         if len(counter) == 3 and all(count == 2 for count in counter.values()):
             return 1500
 
+        "Iterate over each dice count and score the following:"
         for num, count in counter.items():
+            """If the count of a dice appears 3 or more times, do the following:
+            If there are three 1s, add to score 1000
+            Else there are three-of-a-kind of any other count, add to score count * 100 
+            If there are more than three-of-a-kind, then add additional points to score
+            Else if the count of a dice appears less than 3 times and is 1 or a 5:
+            Add to score count * 100 for each 1 and add to score count * 50 for each 5"""
             if count >= 3:
                 if num == 1:
                     score += 1000
                 else:
                     score += num * 100
-
-                # Increment score for additional dice beyond three
                 if count > 3:
                     increment = 100 * (num if num != 1 else 10)
                     score += increment * (count - 3)
