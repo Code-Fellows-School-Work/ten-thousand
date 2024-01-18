@@ -2,12 +2,14 @@
 
 from game_logic.game_logic import GameLogic
 
-def play():
-    pass
+def play(roller=None, num_rounds=20):
+    global dice_roller
+    dice_roller = roller or GameLogic.roll_dice
+
 
 def get_dice_to_set_aside(current_roll):
     """
-    Ask the user which dice to set aside. Ensure that '0' is not entered.
+    Ask the user which dice to set aside. Ensures that '0' is not entered.
 
     :param current_roll: tuple - the current roll of dice
     :return: list - the dice that the user wants to set aside
@@ -86,4 +88,12 @@ def play_game():
 
 
 if __name__ == "__main__":
+
+    # rolls = [
+    #     (3, 2, 5, 4, 3, 3),
+    #     (5, 2, 3, 2, 1, 4)
+    # ]
+    # def mock_roller(num_dice):
+    #     return rolls.pop(0)
+    
     play_game() 
