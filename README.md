@@ -6,7 +6,8 @@
 ### Collaborators: Bradley Howler and Brendan Huddleston
 V.1.0.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/1)
 - Used ChatGPT to write roll dice and calculate score features (refer to prompt.md for AI prompts and code)
-V.1.1.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/1)
+
+V.1.1.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/2)
 - Used ChatGPT to write functions for set aside, banking, total score and current round features.
 
 ### Links and Resources
