@@ -1,5 +1,5 @@
 import pytest
-from ten_thousand.game_logic import GameLogic
+from game_logic.game_logic import GameLogic
 
 pytestmark = [pytest.mark.version_1]
 
