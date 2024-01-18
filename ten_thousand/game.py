@@ -1,6 +1,6 @@
 # play and start_game functions are JB starter code
 
-from game_logic import GameLogic
+from game_logic.game_logic import GameLogic
 
 def play():
     pass
