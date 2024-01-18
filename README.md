@@ -2,7 +2,8 @@
 
 ## Project: Ten Thousand
 
-### Author: Errol Vidad, Bradley Howler and Brendan Huddleston
+### Author: Errol Vidad
+### Collaborators: Bradley Howler and Brendan Huddleston
 V.1.0.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/1)
 - Used ChatGPT to write roll dice and calculate score features (refer to prompt.md for AI prompts and code)
 

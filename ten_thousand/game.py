@@ -2,6 +2,9 @@
 
 from game_logic import GameLogic
 
+def play():
+    pass
+
 def get_dice_to_set_aside(current_roll):
     """
     Ask the user which dice to set aside. Ensure that '0' is not entered.
