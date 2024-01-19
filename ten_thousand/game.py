@@ -1,89 +1,48 @@
 # play and start_game functions are JB starter code
+import sys
 
 from game_logic.game_logic import GameLogic
 
-def play():
-    pass
+def play_game(roll_dice, calculate_score):
 
-def get_dice_to_set_aside(current_roll):
-    """
-    Ask the user which dice to set aside. Ensure that '0' is not entered.
+    print("Starting round 1")
+    print("Rolling 6 dice...")
 
-    :param current_roll: tuple - the current roll of dice
-    :return: list - the dice that the user wants to set aside
-    """
-    while True:
-        "Prints dice roll and asks user to select dice"
-        print(f"Current roll: {current_roll}")
-        dice_to_set_aside = input("Enter the dice you want to set aside (e.g., '1 5 5'), no zeroes allowed: ")
-        try:
-            "Prevents player from selecting 0. If valid dice is selected, then return dice"
-            selected_dice = [int(die) for die in dice_to_set_aside.split()]
-            if 0 in selected_dice:
-                print("Entering '0' is not allowed. Please enter valid dice values.")
-                continue
-            return selected_dice
-        except ValueError:
-            print("Invalid input. Please enter the dice using numbers separated by spaces.")
+    dice = roll_dice(6)
 
-def bank_score(total_score, round_score):
-    """Bank the current round's score to the total score."""
-    total_score += round_score
-    print(f"You banked your score! Total Score: {total_score}")
-    return total_score
+    print(f"*** {' '.join(map(str, dice))} ***")
+    choice = input("Enter dice to keep, or (q)uit:\n> ")
+    if choice == "q":
+        quit_game()
+    else:
+        # print("4, 4") # continue from here
+        keep_dice(calculate_score)
+                    
+def play(roller=None):
+    roll_dice = roller or GameLogic.roll_dice
+    print("Welcome to Ten Thousand")
 
-def track_total_score(total_score):
-    """Display the total score."""
-    print(f"Total Score: {total_score}")
+    choice = input("(y)es to play or (n)o to decline\n> ")
+    if choice.lower() == "n":
+        no_play()
 
-def next_round(current_round):
-    """Increment and display the current round number."""
-    current_round += 1
-    print(f"Round {current_round}")
-    return current_round
+    elif choice.lower() == "y":
+        play_game(roll_dice)
 
-def play_game():
-    total_score = 0
-    num_dice = 6
-    current_round = 0
+    # elif choice.lower == "q":
+    #     quit_game()
 
-    while True:
-        next_round(current_round)
-        round_score = 0
-        round_in_progress = True
+def quit_game():
+    print("Thanks for playing. You earned 0 points")
+    # sys.exit()
+    
+def no_play():
+    print('OK. Maybe another time')
 
-        while round_in_progress:
-            current_roll = GameLogic.roll_dice(num_dice)
-            print(f"Rolled: {current_roll}")
-
-            dice_set_aside = get_dice_to_set_aside(current_roll)
-            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
-
-            num_dice -= len(dice_set_aside)
-            if num_dice == 0:
-                num_dice = 6
-
-            print(f"Round Score: {round_score}")
-            player_choice = input("Choose 'bank', 'roll' again, or 'quit': ").strip().lower()
-
-            if player_choice == 'bank':
-                total_score = bank_score(total_score, round_score)
-                current_round = next_round(current_round)
-                num_dice = 6
-                round_in_progress = False
-            elif player_choice == 'roll':
-                if num_dice == 0:
-                    print("All dice are set aside. Rolling all 6 dice again.")
-                    num_dice = 6
-                continue
-            elif player_choice == 'quit':
-                print(f"Quitting the game. Final Score: {total_score}")
-                return
-            else:
-                print("Invalid input. Please type 'bank', 'roll', or 'quit'.")
-
-        track_total_score(total_score)
-
+def keep_dice(calculate_score):
+    print(f"You have {calculate_score} unbanked points and 5 dice remaining")
 
 if __name__ == "__main__":
-    play_game() 
+    play()
+# play()
+

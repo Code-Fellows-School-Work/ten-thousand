@@ -623,3 +623,582 @@ class GameLogic:
         return score
 </code>
 </pre>
+
+### Prompt 10
+develop a function for this feature:
+Application should allow user to set aside dice each roll
+### Answer 10
+<pre>
+<code>
+import random
+
+class GameLogic:
+    @staticmethod
+    def roll_dice(num_dice):
+        """Roll the specified number of dice and return the results."""
+        return tuple(random.randint(1, 6) for _ in range(num_dice))
+
+    @staticmethod
+    def set_aside_dice(current_roll, dice_to_set_aside):
+        """
+        Set aside selected dice from the current roll.
+
+        :param current_roll: tuple - the current roll of dice
+        :param dice_to_set_aside: list - indices or values of dice to set aside
+        :return: tuple - the new roll with the selected dice set aside
+        """
+        if not all(die in current_roll for die in dice_to_set_aside):
+            raise ValueError("One or more selected dice are not in the current roll.")
+
+        new_roll = list(current_roll)
+        for die in dice_to_set_aside:
+            new_roll.remove(die)
+
+        return tuple(new_roll)
+
+# Example usage
+current_roll = GameLogic.roll_dice(5)
+print(f"Current roll: {current_roll}")
+
+dice_to_set_aside = [1, 5]  # User chooses to set aside a 1 and a 5
+new_roll = GameLogic.set_aside_dice(current_roll, dice_to_set_aside)
+print(f"New roll after setting aside dice: {new_roll}")
+
+</code>
+</pre>
+
+### Prompt 11
+i want to create these functions in a separate file called game.py and import game_logic.py into that file
+### Answer 11
+<pre>
+<code>
+# game_logic.py
+
+class GameLogic:
+    @staticmethod
+    def roll_dice(num_dice):
+        # Implementation of roll_dice
+        pass
+
+    @staticmethod
+    def calculate_score(dice_roll):
+        # Implementation of calculate_score
+        pass
+
+# game.py
+
+from game_logic import GameLogic
+
+def play_game():
+    # Use GameLogic's methods here
+    dice_roll = GameLogic.roll_dice(5)
+    score = GameLogic.calculate_score(dice_roll)
+    # Continue with the game's logic
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 12
+add this feature: Application should allow user to set aside dice each roll
+### Answer 12
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    """
+    Ask the user which dice to set aside.
+
+    :param current_roll: tuple - the current roll of dice
+    :return: list - the dice that the user wants to set aside
+    """
+    print(f"Current roll: {current_roll}")
+    dice_to_set_aside = input("Enter the dice you want to set aside (e.g., '1 5 5'): ")
+    return [int(die) for die in dice_to_set_aside.split()]
+
+def play_game():
+    num_dice = 5  # Starting with 5 dice
+    while num_dice > 0:
+        current_roll = GameLogic.roll_dice(num_dice)
+        try:
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            # Update the current roll by removing the set-aside dice
+            for die in dice_set_aside:
+                if die in current_roll:
+                    current_roll = tuple(d for d in current_roll if d != die)
+                    num_dice -= 1
+                else:
+                    print(f"Die {die} is not in the roll. Please choose again.")
+                    break
+        except ValueError:
+            print("Invalid input. Please enter the dice using numbers separated by spaces.")
+
+        # Continue with the game logic
+        # ...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 13
+add this feature: Application should allow “banking” current score or rolling again.
+### Answer 13
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (same as before)
+
+def play_game():
+    total_score = 0
+    num_dice = 5  # Starting with 5 dice
+    round_score = 0
+
+    while True:
+        current_roll = GameLogic.roll_dice(num_dice)
+        print(f"Rolled: {current_roll}")
+        
+        dice_set_aside = get_dice_to_set_aside(current_roll)
+        # Calculate the score for the set-aside dice
+        round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+        num_dice -= len(dice_set_aside)
+        if num_dice == 0:
+            num_dice = 5  # Reset the number of dice
+
+        print(f"Round Score: {round_score}")
+        player_choice = input("Do you want to 'bank' your score or 'roll' again? (bank/roll): ").strip().lower()
+
+        if player_choice == 'bank':
+            total_score += round_score
+            print(f"You banked your score! Total Score: {total_score}")
+            break  # End of the round
+        elif player_choice == 'roll':
+            if num_dice == 0:
+                print("All dice are set aside. Rolling all 5 dice again.")
+                num_dice = 5
+            continue  # Roll the remaining dice
+        else:
+            print("Invalid input. Please type 'bank' or 'roll'.")
+
+        # Additional game logic...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 14
+implement this additional feature: Application should keep track of current round
+### Answer 14
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (same as before)
+
+def play_game():
+    total_score = 0
+    num_dice = 5  # Starting with 5 dice
+    current_round = 1
+
+    while True:
+        print(f"Round {current_round}")
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            current_roll = GameLogic.roll_dice(num_dice)
+            print(f"Rolled: {current_roll}")
+
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            # Calculate the score for the set-aside dice
+            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+            num_dice -= len(dice_set_aside)
+            if num_dice == 0:
+                num_dice = 5  # Reset the number of dice
+
+            print(f"Round Score: {round_score}")
+            player_choice = input("Do you want to 'bank' your score or 'roll' again? (bank/roll): ").strip().lower()
+
+            if player_choice == 'bank':
+                total_score += round_score
+                print(f"You banked your score! Total Score: {total_score}")
+                round_in_progress = False  # End of the round
+            elif player_choice == 'roll':
+                if num_dice == 0:
+                    print("All dice are set aside. Rolling all 5 dice again.")
+                    num_dice = 5
+                continue  # Roll the remaining dice
+            else:
+                print("Invalid input. Please type 'bank' or 'roll'.")
+
+        current_round += 1
+        # Optionally, ask the player if they want to continue to a new round
+        # ...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 15
+modify the code so that it doesn't allow the user to enter 0 when selecting a dice
+### Answer 15
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    """
+    Ask the user which dice to set aside. Ensure that '0' is not entered.
+
+    :param current_roll: tuple - the current roll of dice
+    :return: list - the dice that the user wants to set aside
+    """
+    while True:
+        print(f"Current roll: {current_roll}")
+        dice_to_set_aside = input("Enter the dice you want to set aside (e.g., '1 5 5'), no zeroes allowed: ")
+        try:
+            selected_dice = [int(die) for die in dice_to_set_aside.split()]
+            if 0 in selected_dice:
+                print("Entering '0' is not allowed. Please enter valid dice values.")
+                continue
+            return selected_dice
+        except ValueError:
+            print("Invalid input. Please enter the dice using numbers separated by spaces.")
+
+def play_game():
+    total_score = 0
+    num_dice = 5  # Starting with 5 dice
+    current_round = 1
+
+    while True:
+        print(f"Round {current_round}")
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            current_roll = GameLogic.roll_dice(num_dice)
+            print(f"Rolled: {current_roll}")
+
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            # Calculate the score for the set-aside dice
+            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+            num_dice -= len(dice_set_aside)
+            if num_dice == 0:
+                num_dice = 5  # Reset the number of dice
+
+            print(f"Round Score: {round_score}")
+            player_choice = input("Do you want to 'bank' your score or 'roll' again? (bank/roll): ").strip().lower()
+
+            if player_choice == 'bank':
+                total_score += round_score
+                print(f"You banked your score! Total Score: {total_score}")
+                round_in_progress = False  # End of the round
+            elif player_choice == 'roll':
+                if num_dice == 0:
+                    print("All dice are set aside. Rolling all 5 dice again.")
+                    num_dice = 5
+                continue  # Roll the remaining dice
+            else:
+                print("Invalid input. Please type 'bank' or 'roll'.")
+
+        current_round += 1
+        # Optionally, ask the player if they want to continue to a new round
+        # ...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 16
+modify the code so when bank is selected, it ends the round, adds +1 to the round count, then rolls a new set of 5 dice
+### Answer 16
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (existing implementation)
+
+def play_game():
+    total_score = 0
+    num_dice = 5  # Starting with 5 dice
+    current_round = 1
+
+    while True:
+        print(f"Round {current_round}")
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            current_roll = GameLogic.roll_dice(num_dice)
+            print(f"Rolled: {current_roll}")
+
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            # Calculate the score for the set-aside dice
+            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+            num_dice -= len(dice_set_aside)
+            if num_dice == 0:
+                num_dice = 5  # Reset the number of dice
+
+            print(f"Round Score: {round_score}")
+            player_choice = input("Do you want to 'bank' your score or 'roll' again? (bank/roll): ").strip().lower()
+
+            if player_choice == 'bank':
+                total_score += round_score
+                print(f"You banked your score! Total Score: {total_score}")
+                current_round += 1  # Increment round count
+                num_dice = 5  # Reset dice for the next round
+                round_in_progress = False  # End the current round
+            elif player_choice == 'roll':
+                if num_dice == 0:
+                    print("All dice are set aside. Rolling all 5 dice again.")
+                    num_dice = 5
+                continue  # Roll the remaining dice
+            else:
+                print("Invalid input. Please type 'bank' or 'roll'.")
+
+        # Optionally, ask the player if they want to continue to a new round
+        # ...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 17
+break down the play_game function into multiple functions where banking the score is it's own function, tracking total score is it's own function, and tracking the round is it's own function
+### Answer 17
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (existing implementation)
+
+def bank_score(total_score, round_score):
+    """Bank the current round's score to the total score."""
+    total_score += round_score
+    print(f"You banked your score! Total Score: {total_score}")
+    return total_score
+
+def track_total_score(total_score):
+    """Display the total score."""
+    print(f"Total Score: {total_score}")
+
+def next_round(current_round):
+    """Increment and display the current round number."""
+    current_round += 1
+    print(f"Round {current_round}")
+    return current_round
+
+def play_game():
+    total_score = 0
+    num_dice = 5
+    current_round = 1
+
+    while True:
+        next_round(current_round)
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            current_roll = GameLogic.roll_dice(num_dice)
+            print(f"Rolled: {current_roll}")
+
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+            num_dice -= len(dice_set_aside)
+            if num_dice == 0:
+                num_dice = 5
+
+            print(f"Round Score: {round_score}")
+            player_choice = input("Do you want to 'bank' your score or 'roll' again? (bank/roll): ").strip().lower()
+
+            if player_choice == 'bank':
+                total_score = bank_score(total_score, round_score)
+                current_round = next_round(current_round)
+                num_dice = 5
+                round_in_progress = False
+            elif player_choice == 'roll':
+                if num_dice == 0:
+                    print("All dice are set aside. Rolling all 5 dice again.")
+                    num_dice = 5
+                continue
+            else:
+                print("Invalid input. Please type 'bank' or 'roll'.")
+
+        track_total_score(total_score)
+        # Optionally, ask the player if they want to continue to a new round
+        # ...
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 18
+enter a function to allow the player to quit playing the game
+### Answer 18
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (existing implementation)
+
+def bank_score(total_score, round_score):
+    # ... (existing implementation)
+
+def track_total_score(total_score):
+    # ... (existing implementation)
+
+def next_round(current_round):
+    # ... (existing implementation)
+
+def check_if_quit():
+    """Ask the player if they want to continue or quit the game."""
+    response = input("Do you want to play another round? (yes/no): ").strip().lower()
+    return response != "yes"
+
+def play_game():
+    total_score = 0
+    num_dice = 5
+    current_round = 1
+
+    while True:
+        next_round(current_round)
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            # ... existing dice rolling and scoring logic
+
+            if check_if_quit():
+                print("Thank you for playing!")
+                return  # End the game
+
+        total_score = bank_score(total_score, round_score)
+        track_total_score(total_score)
+
+        current_round = next_round(current_round)
+        if check_if_quit():
+            print("Thank you for playing!")
+            break  # End the game
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+### Prompt 19
+modify the code is the options are bank/roll/quit
+### Answer 19
+<pre>
+<code>
+# game.py
+
+from game_logic import GameLogic
+
+def get_dice_to_set_aside(current_roll):
+    # ... (existing implementation)
+
+def bank_score(total_score, round_score):
+    # ... (existing implementation)
+
+def track_total_score(total_score):
+    # ... (existing implementation)
+
+def next_round(current_round):
+    # ... (existing implementation)
+
+def play_game():
+    total_score = 0
+    num_dice = 5
+    current_round = 1
+
+    while True:
+        next_round(current_round)
+        round_score = 0
+        round_in_progress = True
+
+        while round_in_progress:
+            current_roll = GameLogic.roll_dice(num_dice)
+            print(f"Rolled: {current_roll}")
+
+            dice_set_aside = get_dice_to_set_aside(current_roll)
+            round_score += GameLogic.calculate_score(tuple(dice_set_aside))
+
+            num_dice -= len(dice_set_aside)
+            if num_dice == 0:
+                num_dice = 5
+
+            print(f"Round Score: {round_score}")
+            player_choice = input("Choose 'bank', 'roll' again, or 'quit': ").strip().lower()
+
+            if player_choice == 'bank':
+                total_score = bank_score(total_score, round_score)
+                current_round = next_round(current_round)
+                num_dice = 5
+                round_in_progress = False
+            elif player_choice == 'roll':
+                if num_dice == 0:
+                    print("All dice are set aside. Rolling all 5 dice again.")
+                    num_dice = 5
+                continue
+            elif player_choice == 'quit':
+                print(f"Quitting the game. Final Score: {total_score}")
+                return
+            else:
+                print("Invalid input. Please type 'bank', 'roll', or 'quit'.")
+
+        track_total_score(total_score)
+
+if __name__ == "__main__":
+    play_game()
+
+</code>
+</pre>
+
+<!-- ### Prompt 20
+
+### Answer 20
+<pre>
+<code>
+
+</code>
+</pre> -->
