@@ -3,7 +3,7 @@ import sys
 
 from game_logic.game_logic import GameLogic
 
-def play_game(roll_dice):
+def play_game(roll_dice, calculate_score):
 
     print("Starting round 1")
     print("Rolling 6 dice...")
@@ -16,7 +16,7 @@ def play_game(roll_dice):
         quit_game()
     else:
         # print("4, 4") # continue from here
-        keep_dice()
+        keep_dice(calculate_score)
                     
 def play(roller=None):
     roll_dice = roller or GameLogic.roll_dice
@@ -39,8 +39,8 @@ def quit_game():
 def no_play():
     print('OK. Maybe another time')
 
-def keep_dice():
-
+def keep_dice(calculate_score):
+    print(f"You have {calculate_score} unbanked points and 5 dice remaining")
 
 if __name__ == "__main__":
     play()
