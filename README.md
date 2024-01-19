@@ -10,8 +10,9 @@ V.1.0.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/1)
 V.1.1.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/2)
 - Used ChatGPT to write functions for set aside, banking, total score and current round features.
 
-V.1.2.0
+V.2.0.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/4)
 - Updated prompt.md with additional ChatGPT prompts and answers
+- Restarted game.py logic to match test code
 
 ### Links and Resources
 - Back-end server url (when applicable): None
@@ -38,4 +39,5 @@ How do you run tests?
 
 Any tests of note?
 - All 62 tests pass in version_1
-- All 4 tests fail in version_2
+- 2 tests pass and 2 tests fail in version_2
+- Have not tried running tests in version_3
