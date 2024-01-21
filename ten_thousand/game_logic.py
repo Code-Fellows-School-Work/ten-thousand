@@ -55,3 +55,21 @@ class GameLogic:
 
         return score
 
+    @staticmethod
+    def validate_keepers(roll, keepers):
+        """
+        Validate that the keepers are a valid subset of the roll.
+
+        :param roll: tuple of integers representing the original dice roll
+        :param keepers: tuple of integers representing the dice the user wants to keep
+        :return: bool indicating whether the keepers are a valid subset of the roll
+        """
+        roll_counter = Counter(roll)
+        keepers_counter = Counter(keepers)
+        print("potato", roll_counter)
+        print("keeper", keepers_counter)
+        for die in keepers_counter:
+            if keepers_counter[die] > roll_counter[die]:
+                return False
+        return True
+        
