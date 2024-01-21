@@ -21,7 +21,7 @@ def test_single_bank():
     )
     assert not diffs, diffs
 
-@pytest.mark.skip
+# @pytest.mark.skip
 def test_bank_first_for_two_rounds():
     diffs = diff(
         play, path="tests/version_2/bank_first_for_two_rounds.sim.txt"
