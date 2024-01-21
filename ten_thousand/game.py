@@ -1,7 +1,7 @@
 # play and start_game functions are JB starter code
 import sys
 
-from game_logic.game_logic import GameLogic
+from ten_thousand.game_logic import GameLogic
 
 def play(roller=None):
     "Allows player to choose if they want to play game or quit game"
