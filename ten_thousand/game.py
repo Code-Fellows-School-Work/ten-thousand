@@ -30,35 +30,48 @@ def no_play():
 def keep_dice(calculate_score, remaining_dice):
     print(f"You have {calculate_score} unbanked points and {remaining_dice} dice remaining")
 
+def bank_points(unbanked_points, round_number, total_score):
+    print(f"You banked {unbanked_points} points in round {round_number}")
+    print(f"Total score is {total_score} points")
+
 def start_game(roll_dice, calculate_score):
 
     round_number = 1
     total_score = 0
     total_dice = 6
 
-    print(f"Starting round {round_number}")
-    print("Rolling 6 dice...")
+    while True:
+        print(f"Starting round {round_number}")
+        print("Rolling 6 dice...")
 
-    dice = roll_dice(6)
+        dice = roll_dice(6)
 
-    print(f"*** {' '.join(map(str, dice))} ***")
-    choice = input("Enter dice to keep, or (q)uit:\n> ")
-    if choice.lower() == "q":
-        quit_game(total_score)
-    elif choice:
-        # print("Player choice: ", choice)
-        # print("Data type: ", type(choice))
-        # print("before replace", len(choice))\
-        # find the space in this string and remove it
-        remove_spaces = choice.replace(" ", "")
-        # print("after replace", len(remove_spaces))
-        score = calculate_score(dice)
-        remaining_dice = total_dice - len(remove_spaces)
-        keep_dice(score, remaining_dice)
-        while False:
-            print("while loop example")
-
-
+        print(f"*** {' '.join(map(str, dice))} ***")
+        choice = input("Enter dice to keep, or (q)uit:\n> ")
+        if choice.lower() == "q":
+            quit_game(total_score)
+            return
+        elif choice:
+            # print("Player choice: ", choice)
+            # print("Data type: ", type(choice))
+            # print("before replace", len(choice))\
+            # find the space in this string and remove it
+            remove_spaces = choice.replace(" ", "")
+            # print("after replace", len(remove_spaces))
+            unbanked_points = calculate_score(dice)
+            # print("Unbanked points:", unbanked_points)
+            remaining_dice = total_dice - len(remove_spaces)
+            keep_dice(unbanked_points, remaining_dice)
+            player_decision = input("(r)oll again, (b)ank your points or (q)uit:\n> ")
+            # if player_decision.lower == "r":
+            #     roll_again function
+            if player_decision.lower() == "b":
+                total_score = total_score + unbanked_points
+                bank_points(unbanked_points, round_number, total_score)
+                round_number = round_number + 1
+            # else:
+            #     quit_game(total_score)
+            #     return
                     
 
 if __name__ == "__main__":
