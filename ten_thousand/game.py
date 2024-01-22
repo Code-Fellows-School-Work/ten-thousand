@@ -8,6 +8,7 @@ def play(roller=None):
 
     roll_dice = roller or GameLogic.roll_dice
     calculate_score = GameLogic.calculate_score
+    
 
     print("Welcome to Ten Thousand")
 
@@ -34,12 +35,16 @@ def bank_points(unbanked_points, round_number, total_score):
     print(f"You banked {unbanked_points} points in round {round_number}")
     print(f"Total score is {total_score} points")
 
+def invalid_keepers():
+    print("Cheater!!! Or possibly made a typo...")
+
 def start_game(roll_dice, calculate_score):
 
     round_number = 1
     total_score = 0
     total_dice = 6
     unbanked_points = 0
+    validate_keepers = GameLogic.validate_keepers
 
     while True:
         print(f"Starting round {round_number}")
@@ -53,19 +58,23 @@ def start_game(roll_dice, calculate_score):
             if choice.lower() == "q":
                 quit_game(total_score)
                 return
+            # if validate_keepers(dice, choice) == False:
+            #     invalid_keepers()
+            #     print(f"*** {' '.join(map(str, dice))} ***")
+            #     choice = input("Enter dice to keep, or (q)uit:\n> ")
             elif choice:
                 # find the space in this string and remove it
                 remove_spaces = choice.replace(" ", "")
                 kept_dice = tuple(int(num) for num in choice)
                 unbanked_points = unbanked_points + calculate_score(kept_dice)
                 remaining_dice_int = total_dice - len(remove_spaces)
-                # print(f"data type: {type(remaining_dice)} dice remaining:", remaining_dice)
+                # if player keeps all dice or no dice remain, then hot dice
+                if len(kept_dice) == 6 or total_dice == 0:
+                    remaining_dice_int = 6
                 unbank_points_and_dice_remaining_str(unbanked_points, remaining_dice_int)
                 player_decision = input("(r)oll again, (b)ank your points or (q)uit:\n> ")
                 if player_decision.lower() == "r":
                     total_dice = remaining_dice_int
-                    roll_again = roll_dice(remaining_dice_int)
-                    # print("new dice roll", roll_again)
                 if player_decision.lower() == "b":
                     total_score = total_score + unbanked_points
                     bank_points(unbanked_points, round_number, total_score)
@@ -76,7 +85,7 @@ def start_game(roll_dice, calculate_score):
                 if player_decision.lower() == "q":
                     quit_game(total_score)
                     return
-                    
+                
 
 if __name__ == "__main__":
     play()
