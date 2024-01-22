@@ -1,6 +1,3 @@
-# play and start_game functions are JB starter code
-import sys
-
 from ten_thousand.game_logic import GameLogic
 
 def play(roller=None):
@@ -29,21 +26,33 @@ def no_play():
     print('OK. Maybe another time')
 
 def unbank_points_and_dice_remaining_str(calculate_score, remaining_dice):
+    "When player selects dice to keep, displays unbanked point total and dice remaining"
     print(f"You have {calculate_score} unbanked points and {remaining_dice} dice remaining")
 
 def bank_points(unbanked_points, round_number, total_score):
+    "When player banks point, displays banked points in round and total score"
     print(f"You banked {unbanked_points} points in round {round_number}")
     print(f"Total score is {total_score} points")
 
 def invalid_keepers():
+    "When player selects invalid dice, displays cheater message"
     print("Cheater!!! Or possibly made a typo...")
 
 def zilch():
+    "When player rolls a non-scoring roll, displays zilch message"
     print("****************************************")
     print("**        Zilch!!! Round over         **")
     print("****************************************")
 
 def start_game(roll_dice, calculate_score):
+    """
+    Plays the game Ten Thousand.
+
+    :param 
+        roll_dice: int representing the number of dice to roll
+        calculate_score: beginning with a score of 0, calculate the score for a given dice roll
+    :return: tuple containing the results of each die roll
+    """
 
     round_number = 1
     total_score = 0
@@ -53,11 +62,11 @@ def start_game(roll_dice, calculate_score):
 
     while True:
         print(f"Starting round {round_number}")
-        # print(f"score before:", total_score)
         while True:
             dice = roll_dice(total_dice)
             print(f"Rolling {total_dice} dice...")
             print(f"*** {' '.join(map(str, dice))} ***")
+            # zilch functionality
             if calculate_score(dice) == 0:
                 zilch()
                 unbanked_points = 0
@@ -65,28 +74,26 @@ def start_game(roll_dice, calculate_score):
                 round_number = round_number + 1
                 total_dice = 6
                 break
-            # print("score after:", total_score)
             while True:
                 choice = input("Enter dice to keep, or (q)uit:\n> ")
                 if choice.lower() == "q":
                     quit_game(total_score)
                     return
+                # used ChatGPT to correct tuple conversion
+                # validate keepers functionality
                 choice_tuple = tuple(int(num) for num in choice if num.isdigit())
                 if validate_keepers(dice, choice_tuple) == False:
-                    # print(validate_keepers(dice, choice_tuple))
-                    # print(dice, choice_tuple)
-                    # print("choice type:", type(choice_tuple))
                     invalid_keepers()
                     print(f"*** {' '.join(map(str, dice))} ***")
                 else:
                     break
             if choice:
-                # find the space in this string and remove it
                 remove_spaces = choice.replace(" ", "")
+                # used ChatGPT to correct tuple conversion
                 kept_dice = tuple(int(num) for num in choice if num.isdigit())
                 unbanked_points = unbanked_points + calculate_score(kept_dice)
                 remaining_dice_int = total_dice - len(remove_spaces)
-                # if player keeps all dice or no dice remain, then hot dice
+                # hot dice functionality
                 if len(kept_dice) == 6 or total_dice == 0:
                     remaining_dice_int = 6
                 unbank_points_and_dice_remaining_str(unbanked_points, remaining_dice_int)
