@@ -38,6 +38,11 @@ def bank_points(unbanked_points, round_number, total_score):
 def invalid_keepers():
     print("Cheater!!! Or possibly made a typo...")
 
+def zilch():
+    print("****************************************")
+    print("**        Zilch!!! Round over         **")
+    print("****************************************")
+
 def start_game(roll_dice, calculate_score):
 
     round_number = 1
@@ -53,6 +58,13 @@ def start_game(roll_dice, calculate_score):
             dice = roll_dice(total_dice)
             print(f"Rolling {total_dice} dice...")
             print(f"*** {' '.join(map(str, dice))} ***")
+            if calculate_score(dice) == 0:
+                zilch()
+                unbanked_points = 0
+                bank_points(unbanked_points, round_number, total_score)
+                round_number = round_number + 1
+                total_dice = 6
+                break
             # print("score after:", total_score)
             while True:
                 choice = input("Enter dice to keep, or (q)uit:\n> ")
