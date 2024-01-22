@@ -1,4 +1,4 @@
-# LAB - Class 06, 07
+# LAB - Class 06, 07, 08
 
 ## Project: Ten Thousand
 
@@ -13,6 +13,14 @@ V.1.1.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/2)
 V.2.0.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/4)
 - Updated prompt.md with additional ChatGPT prompts and answers
 - Restarted game.py logic to match test code
+
+V.2.1.0 (Pr: https://github.com/Code-Fellows-School-Work/ten-thousand/pull/6)
+- Added roll, bank, and quit 
+- Added function to update state for total score and round
+- Add hot dice logic
+- Added dice validation
+- Added zilch
+
 
 ### Links and Resources
 - Back-end server url (when applicable): None
@@ -39,5 +47,8 @@ How do you run tests?
 
 Any tests of note?
 - All 62 tests pass in version_1
-- 2 tests pass and 2 tests fail in version_2
-- Have not tried running tests in version_3
+- All 4 tets pass in version_2
+- Status of version_3 tests:
+    - test_get_scorers.py - 0/7 pass
+    - test_sim_advanced.py - 4/4 pass
+    - test_validate_keepers.py - 3/3 pass
