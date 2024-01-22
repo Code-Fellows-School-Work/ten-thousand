@@ -66,8 +66,6 @@ class GameLogic:
         """
         roll_counter = Counter(roll)
         keepers_counter = Counter(keepers)
-        print("potato", roll_counter)
-        print("keeper", keepers_counter)
         for die in keepers_counter:
             if keepers_counter[die] > roll_counter[die]:
                 return False

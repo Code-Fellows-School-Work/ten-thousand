@@ -5,7 +5,7 @@ from ten_thousand.game import play
 
 pytestmark = [pytest.mark.version_3]
 
-@pytest.mark.skip
+# @pytest.mark.skip
 def test_repeat_roller():
     """Allow setting aside scoring dice and rolling the rest
     """
