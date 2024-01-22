@@ -53,19 +53,25 @@ def start_game(roll_dice, calculate_score):
             dice = roll_dice(total_dice)
             print(f"Rolling {total_dice} dice...")
             print(f"*** {' '.join(map(str, dice))} ***")
-            choice = input("Enter dice to keep, or (q)uit:\n> ")
             # print("score after:", total_score)
-            if choice.lower() == "q":
-                quit_game(total_score)
-                return
-            # if validate_keepers(dice, choice) == False:
-            #     invalid_keepers()
-            #     print(f"*** {' '.join(map(str, dice))} ***")
-            #     choice = input("Enter dice to keep, or (q)uit:\n> ")
-            elif choice:
+            while True:
+                choice = input("Enter dice to keep, or (q)uit:\n> ")
+                if choice.lower() == "q":
+                    quit_game(total_score)
+                    return
+                choice_tuple = tuple(int(num) for num in choice if num.isdigit())
+                if validate_keepers(dice, choice_tuple) == False:
+                    # print(validate_keepers(dice, choice_tuple))
+                    # print(dice, choice_tuple)
+                    # print("choice type:", type(choice_tuple))
+                    invalid_keepers()
+                    print(f"*** {' '.join(map(str, dice))} ***")
+                else:
+                    break
+            if choice:
                 # find the space in this string and remove it
                 remove_spaces = choice.replace(" ", "")
-                kept_dice = tuple(int(num) for num in choice)
+                kept_dice = tuple(int(num) for num in choice if num.isdigit())
                 unbanked_points = unbanked_points + calculate_score(kept_dice)
                 remaining_dice_int = total_dice - len(remove_spaces)
                 # if player keeps all dice or no dice remain, then hot dice
