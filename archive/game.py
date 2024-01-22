@@ -1,6 +1,6 @@
 # play and start_game functions are JB starter code
 
-from game_logic.game_logic import GameLogic
+from ten_thousand.game_logic import GameLogic
 
 def play(roller=None, num_rounds=20):
     global dice_roller
